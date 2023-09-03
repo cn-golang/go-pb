@@ -28,7 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DataClient interface {
 	AddBindingDoctor(ctx context.Context, in *AddBindingDoctorReq, opts ...grpc.CallOption) (*AddBindingDoctorRes, error)
-	DelBindingDoctor(ctx context.Context, in *DelBindingDoctorReq, opts ...grpc.CallOption) (*DelBindingDoctorRes, error)
+	DelBindingDoctor(ctx context.Context, in *AddBindingDoctorReq, opts ...grpc.CallOption) (*AddBindingDoctorRes, error)
 }
 
 type dataClient struct {
@@ -48,8 +48,8 @@ func (c *dataClient) AddBindingDoctor(ctx context.Context, in *AddBindingDoctorR
 	return out, nil
 }
 
-func (c *dataClient) DelBindingDoctor(ctx context.Context, in *DelBindingDoctorReq, opts ...grpc.CallOption) (*DelBindingDoctorRes, error) {
-	out := new(DelBindingDoctorRes)
+func (c *dataClient) DelBindingDoctor(ctx context.Context, in *AddBindingDoctorReq, opts ...grpc.CallOption) (*AddBindingDoctorRes, error) {
+	out := new(AddBindingDoctorRes)
 	err := c.cc.Invoke(ctx, Data_DelBindingDoctor_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (c *dataClient) DelBindingDoctor(ctx context.Context, in *DelBindingDoctorR
 // for forward compatibility
 type DataServer interface {
 	AddBindingDoctor(context.Context, *AddBindingDoctorReq) (*AddBindingDoctorRes, error)
-	DelBindingDoctor(context.Context, *DelBindingDoctorReq) (*DelBindingDoctorRes, error)
+	DelBindingDoctor(context.Context, *AddBindingDoctorReq) (*AddBindingDoctorRes, error)
 	mustEmbedUnimplementedDataServer()
 }
 
@@ -73,7 +73,7 @@ type UnimplementedDataServer struct {
 func (UnimplementedDataServer) AddBindingDoctor(context.Context, *AddBindingDoctorReq) (*AddBindingDoctorRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddBindingDoctor not implemented")
 }
-func (UnimplementedDataServer) DelBindingDoctor(context.Context, *DelBindingDoctorReq) (*DelBindingDoctorRes, error) {
+func (UnimplementedDataServer) DelBindingDoctor(context.Context, *AddBindingDoctorReq) (*AddBindingDoctorRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelBindingDoctor not implemented")
 }
 func (UnimplementedDataServer) mustEmbedUnimplementedDataServer() {}
@@ -108,7 +108,7 @@ func _Data_AddBindingDoctor_Handler(srv interface{}, ctx context.Context, dec fu
 }
 
 func _Data_DelBindingDoctor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelBindingDoctorReq)
+	in := new(AddBindingDoctorReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -120,7 +120,7 @@ func _Data_DelBindingDoctor_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: Data_DelBindingDoctor_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DataServer).DelBindingDoctor(ctx, req.(*DelBindingDoctorReq))
+		return srv.(DataServer).DelBindingDoctor(ctx, req.(*AddBindingDoctorReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
